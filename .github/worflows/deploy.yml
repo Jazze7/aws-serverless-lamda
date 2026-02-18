@@ -1,0 +1,9 @@
+exports.handler = async (event) => {
+return {
+statuscode:200,
+body:JSON.stringify({
+message: "Hello from serverless function"
+timestamp: new Date().toISOString(),
+})
+};
+};
