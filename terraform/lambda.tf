@@ -39,14 +39,14 @@ resource "aws_lambda_function" "node_function" {
 
 
     handler = "handler.handler"
-    runtime = "nodejs22.x"
+    runtime = "nodejs20.x"
 
     memory_size = 128
     timeout = 5
 
     environment {
       variables = {
-        TABLE= aws_dynamodb_table.aws_dynamodb_table_lambda.table_name
+        TABLE= aws_dynamodb_table.aws_dynamodb_table_lambda.name
       }
     }
 }
