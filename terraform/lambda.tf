@@ -1,7 +1,7 @@
 resource "aws_iam_role" "lambda_role" {
     name = "${var.project_name}-lambda-role"
 
-    assume_role_policy = jsondecode({
+    assume_role_policy = jsonencode({
             Version = "2012-10-17"
             Statement= [{
                 Effect = "Allow"
@@ -31,9 +31,13 @@ data "archive_file" "node_app" {
 }
 resource "aws_lambda_function" "node_function" {
     function_name = "${var.project_name}-function"
-    role = aws_iam_role.lambda_role.name
-    filename = data.archive_file.node-app.output_path
+    role = aws_iam_role.lambda_role.arn
+    publish = true
+
+    filename = data.archive_file.node_app.output_path
     source_code_hash = data.archive_file.node_app.output_base64sha256
+
+
     handler = "handler.handler"
     runtime = "nodejs22.x"
 
