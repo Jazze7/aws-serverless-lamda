@@ -4,15 +4,22 @@ const {
   GetCommand,
   PutCommand,
 } = require("@aws-sdk/lib-dynamodb");
+
 const client = new DynamoDBClient({});
 const ddb = DynamoDBDocumentClient.from(client);
 
 const TABLE = process.env.TABLE;
 
 exports.handler = async (event) => {
+  console.log("EVENT:", JSON.stringify(event));
+
   try {
-    const method = event.requestContext.http.method;
-    const path = event.requestContext.http.path;
+    // ✅ Support both HTTP API v2 and REST API v1
+    const method =
+      event.requestContext?.http?.method || event.httpMethod;
+
+    const path =
+      event.requestContext?.http?.path || event.path;
 
     // =========================
     // ROOT ENDPOINT (GET /)
@@ -77,12 +84,11 @@ exports.handler = async (event) => {
       return response(200, result.Item);
     }
 
-    // Default
     return response(404, { error: "Route not found" });
 
   } catch (error) {
-    console.error("Error:", error);
-    return response(500, { error: "Internal Server Error" });
+    console.error("ERROR:", error);
+    return response(500, { error: error.message });
   }
 };
 

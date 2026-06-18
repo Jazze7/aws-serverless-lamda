@@ -21,10 +21,10 @@ resource "aws_s3_bucket_versioning" "terraform-state-bucket-serverless-versionin
 resource "aws_dynamodb_table" "lock" {
     name= "terraform-lock"
     billing_mode = "PAY_PER_REQUEST"
-    hash_key = "lockid"
+    hash_key = "LockID"
   
   attribute {
-    name="lockid"
+    name="LockID"
     type = "S"
   }
 }
